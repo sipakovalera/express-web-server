@@ -5,7 +5,7 @@ const { createUser, getUsers, readUser, deleteUser, updateUser } = require("../c
 router
   .get('/', getUsers )
   .post('/', createUser)
-  .get('/:id', createUser)
+  .get('/:id', readUser)
   .delete('/:id', deleteUser)
   .patch('/:id', updateUser);
 
