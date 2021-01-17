@@ -4,6 +4,7 @@ const usersRouter = require("./users/routes/users.route");
 const app = express();
 const port = 3000;
 
+
 app.use(bodyParser.json());
 app.use('/users', usersRouter);
 

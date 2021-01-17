@@ -1,42 +1,51 @@
-class UsersService {
-  users = [
-    {
-      name: 'Lera',
-      login: 'lerasipakova',
-      password: 'qazwsx',
-      id: 1610824049600
-    },
-    {
-      name: 'Anna',
-      login: 'annapetrova',
-      password: 'edcrfv',
-      id: 1610824049700
+const fs = require('fs');
+
+//load all users
+const loadJSON = (filename = '') => {
+  return JSON.parse(fs.existsSync(filename) ? 
+  fs.readFileSync(filename).toString() 
+  : '""' )};
+const data = loadJSON('users.json');
+
+//save users 
+const saveJSON = (filename = '', json = '""') => {
+  return fs.writeFile(filename, JSON.stringify(json), (err) => {
+    if(err){
+      console.log("Асинхронная запись файла завершена");
+    } else {
+      const newData = fs.readFileSync("users.json", "utf8");
+      console.log(newData);
     }
-  ]
+  }
+   )};
+
+class UsersService {
 
   getUsers = () => {;
-    return this.users;
+    return data;
   }
 
   addUser = (user) => {
     user.id = Date.now();
-    this.users.push(user);
-    return this.users;
+    data.push(user);
+    return saveJSON('users.json', data); 
   }
 
   updateUser = (updateUser, id) => {
-    const index = this.users.findIndex(user => user.id === id);
-        this.users[index] = {
-          ...this.users[index],
+    const index = data.findIndex(user => user.id === id);
+      data[index] = {
+          ...data[index],
           ...updateUser
-        }
-        return this.users;
+      }    
+        return saveJSON('users.json', data);;
   }
 
   deleteUser = (id) => {
-        this.users = this.users.filter((user) => user.id !== id);
-        return this.users;
+    const index = data.findIndex(user => user.id === id);
+    data.splice(index, 1);
+    return saveJSON('users.json', data);
   }
 };
+
 
 module.exports = new UsersService();
