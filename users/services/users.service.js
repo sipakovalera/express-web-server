@@ -32,12 +32,12 @@ class UsersService {
   }
 
   updateUser = (updateUser, id) => {
-    const index = data.findIndex(user => user.id === id);
+    const index = data.findIndex(user => Number(user.id) === Number(id));
       data[index] = {
           ...data[index],
           ...updateUser
       }    
-        return saveJSON('users.json', data);;
+        return saveJSON('users.json', data);
   }
 
   deleteUser = (id) => {
