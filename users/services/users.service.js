@@ -1,4 +1,6 @@
 const fs = require('fs');
+const jwt  = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 //load all users
 const loadJSON = (filename = '') => {
@@ -21,12 +23,18 @@ const saveJSON = (filename = '', json = '""') => {
 
 class UsersService {
 
-  getUsers = () => {;
+  getUsers = () => {
     return data;
   }
 
   addUser = (user) => {
     user.id = Date.now();
+
+    //hash password
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(user.password, salt);
+    user.password = hash;
+  
     data.push(user);
     return saveJSON('users.json', data); 
   }
@@ -44,6 +52,24 @@ class UsersService {
     const index = data.findIndex(user => user.id === id);
     data.splice(index, 1);
     return saveJSON('users.json', data);
+  }
+
+  loginUser = (login, password) => {
+      const user = data.find(user => user.login === login);
+        if (!user){
+          console.log(`${user} not found`); 
+        } else {
+          const passwordByUser = bcrypt.compareSync(password, user.password);
+            if(passwordByUser){
+              const token = jwt.sign({
+                login: user.login,
+                id: user.id
+                }, 'secret', {expiresIn: 60 * 60 });
+                console.log(token);
+            } else {
+              console.log('Invalid password');
+            }
+        }  
   }
 };
 

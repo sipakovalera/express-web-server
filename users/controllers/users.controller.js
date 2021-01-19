@@ -25,6 +25,12 @@ class UsersController {
       .status(200)
       .send(this.service.deleteUser(req.params.id));
   };
+
+  login = (req, res, next ) => {
+    res
+      .status(200)
+      .send(this.service.loginUser(req.body.login, req.body.password));
+  };
 }
 
 module.exports = new UsersController();
