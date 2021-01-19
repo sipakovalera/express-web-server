@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const usersRouter = require("./users/routes/users.route");
-const bcrypt = require('bcrypt');
 const app = express();
 const port = 3000;
 

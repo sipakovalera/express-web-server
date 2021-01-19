@@ -35,7 +35,6 @@ class UsersService {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(user.password, salt);
     user.password = hash;
-  
     data.push(user);
     return saveJSON('users.json', data); 
   }
@@ -71,15 +70,6 @@ class UsersService {
               console.log('Invalid password');
             }
         }  
-  }
-};
-
-registerUser = (login, password) => {
-  const user = data.find(user => user.login === login);
-  if(!user){
-
-  } else {
-    console.log(`${user} уже занят`)
   }
 };
 
