@@ -1,15 +1,23 @@
 const jwt = require('jsonwebtoken');
+const { secret } = require('../config/key');
 
-const auth = (tokenType) => (req, res, next) => {
+const auth = (req, res, next) => {
   try{
-    const [strategy, token] = req.headers['autorization'].split('');
-    const result = jwt.verify(token, 'secret');
-    //dbStorage
-    //const user = await dbStorage.findByLogin(login)
-    req.user = user;
+    const token = req.headers.autorization.split(' ')[1];
+    if(!token){
+      return res.status(403).json({
+        message: 'User is not autorized'
+      })
+    }
+    const decodeData = jwt.verify(token, secret);
+    req.user = decodeData;
     next(); 
   } catch (e) {
-    res.status(401).send(e.message)
+    res
+      .status(401)
+      .json({
+        message: 'User is not autorized'
+      })
   };
 };
 

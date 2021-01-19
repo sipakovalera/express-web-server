@@ -1,6 +1,7 @@
 const fs = require('fs');
 const jwt  = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const {secret} = require('../config/key');
 
 //load all users
 const loadJSON = (filename = '') => {
@@ -64,8 +65,8 @@ class UsersService {
               const token = jwt.sign({
                 login: user.login,
                 id: user.id
-                }, 'secret', {expiresIn: 60 * 60 });
-                console.log(token);
+                }, secret, {expiresIn: 60 * 60 })
+                return ({token, user});
             } else {
               console.log('Invalid password');
             }
@@ -73,5 +74,13 @@ class UsersService {
   }
 };
 
+registerUser = (login, password) => {
+  const user = data.find(user => user.login === login);
+  if(!user){
+
+  } else {
+    console.log(`${user} уже занят`)
+  }
+};
 
 module.exports = new UsersService();

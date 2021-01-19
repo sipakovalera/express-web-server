@@ -4,10 +4,11 @@ const controller = require('../controllers/users.controller');
 const auth = require('../middlewares/auth.middlewars');
 
 router
-  .get('/',controller.get )
-  .post('/register', controller.add )
+  .get('/', auth, controller.get )
+  .post('/', controller.add )
   .delete('/:id', controller.delete)
-  .put('/:id', auth, controller.update)
-  .post('/login', controller.login);
+  .put('/:id', controller.update)
+  .post('/login', controller.login)
+  .post('/register', controller.register)
   
 module.exports = router;
