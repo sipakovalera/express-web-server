@@ -31,12 +31,7 @@ class UsersController {
       .status(200)
       .send(this.service.loginUser(req.body.login, req.body.password));
   };
-
-  register = (req, res, next ) => {
-    res
-      .status(200)
-      .send(this.service.registerUser(req.body.login, req.body.password));
-  };  
+  
 }
 
 module.exports = new UsersController();

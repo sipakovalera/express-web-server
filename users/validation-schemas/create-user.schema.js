@@ -17,10 +17,9 @@ const createUserSchema = Joi.object({
         .max(2013),
 
     login: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+        .email({ minDomainSegments: 2, tlds: { allow: true } })
         .required(),
 })
-    .with('name', 'birth_year')
-    .with('password', 'login');
+    .with('login', 'password');
 
     module.exports = createUserSchema;

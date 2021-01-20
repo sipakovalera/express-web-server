@@ -14,13 +14,19 @@ const data = loadJSON('users.json');
 const saveJSON = (filename = '', json = '""') => {
   return fs.writeFile(filename, JSON.stringify(json), (err) => {
     if(err){
-      console.log("Асинхронная запись файла завершена");
+      console.log("Async recording completed");
     } else {
       const newData = fs.readFileSync("users.json", "utf8");
       console.log(newData);
     }
   }
    )};
+
+const generatedToken = (user) => {
+  const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(user.password, salt);
+    return user.password = hash;
+}
 
 class UsersService {
 
@@ -30,17 +36,14 @@ class UsersService {
 
   addUser = (user) => {
     user.id = Date.now();
-
-    //hash password
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(user.password, salt);
-    user.password = hash;
+    generatedToken(user);
     data.push(user);
     return saveJSON('users.json', data); 
   }
 
   updateUser = (updateUser, id) => {
     const index = data.findIndex(user => Number(user.id) === Number(id));
+    generatedToken(updateUser);
       data[index] = {
           ...data[index],
           ...updateUser
@@ -55,21 +58,21 @@ class UsersService {
   }
 
   loginUser = (login, password) => {
-      const user = data.find(user => user.login === login);
-        if (!user){
-          console.log(`${user} not found`); 
-        } else {
-          const passwordByUser = bcrypt.compareSync(password, user.password);
-            if(passwordByUser){
-              const token = jwt.sign({
-                login: user.login,
-                id: user.id
-                }, secret, {expiresIn: 60 * 60 })
-                return ({token, user});
-            } else {
+    const user = data.find(user => user.login === login);
+      if (!user){
+        console.log(`${user} not found`); 
+      } else {
+        const passwordByUser = bcrypt.compareSync(password, user.password);
+          if(passwordByUser){
+            const token = jwt.sign({
+              login: user.login,
+              id: user.id
+            }, secret, {expiresIn: 60 * 60 })
+              return ({token, user});
+          } else {
               console.log('Invalid password');
-            }
-        }  
+          }
+      }  
   }
 };
 
