@@ -13,5 +13,4 @@ const updateUserSchema = Joi.object({
         .email({ minDomainSegments: 2, tlds: { allow: true } })
 });
 
-
 module.exports = updateUserSchema;

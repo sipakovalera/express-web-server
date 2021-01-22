@@ -5,31 +5,31 @@ class UsersController {
   get = ( req, res, next ) => {
     res
       .status(200)
-      .send(this.service.getUsers());
+      .send(this.service.get());
   };
 
   add = ( req, res, next ) => {
     res
       .status(200)
-      .send(this.service.addUser(req.body));
+      .send(this.service.add(req.body));
   };
 
   update = ( req, res, next ) => {
     res
       .status(200)
-      .send(this.service.updateUser(req.body, req.params.id));
+      .send(this.service.update(req.body, req.params.id));
   }; 
 
   delete = (req, res, next ) => {
     res
       .status(200)
-      .send(this.service.deleteUser(req.params.id));
+      .send(this.service.delete(req.params.id));
   };
 
   login = (req, res, next ) => {
     res
       .status(200)
-      .send(this.service.loginUser(req.body.login, req.body.password));
+      .send(this.service.login(req.body.login, req.body.password));
   };
   
 }
