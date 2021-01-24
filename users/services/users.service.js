@@ -1,17 +1,15 @@
-const fs = require('fs');
 const jwt  = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const {secret} = require('../config/key');
+const { secret } = require('../config/key');
 const User = require('../models/User');
 class UsersService {
 
-  get = async() => {
+  get = async() => { 
     return await User.findAll();
   }
 
   add = async(user) => {
     const salt = await bcrypt.genSalt(10);
-    console.log(user);
     return await User.create({
       id: user.id,
       name: user.name,
@@ -33,7 +31,7 @@ class UsersService {
 
       } if(login){
         updateUser = await User.update({login: login}, {
-           where: {
+           where:{
              id: id
           }
         });
@@ -62,24 +60,21 @@ class UsersService {
   }
 
   login = async (login, password) => {
-    const user = await User.findOne({where:{ login: login }});
+    const user = await User.findOne({where:{ login : login }});
       if (!user){
-        console.log(`${user} is not found`); 
+        console.log(`User is not found`); 
       } else {
         const passwordByUser = await bcrypt.compare(password, user.password);
-          if(passwordByUser){
-            const token = jwt.sign({
-              id: user.id,
-              login: user.login,
-              name: user.name           
-            }, secret, {expiresIn: '12.5hrs' });
-              console.log(token);
-              return ({token, user});
-          } else {
-              console.log('Invalid password');
-          }
-      }  
+        if(passwordByUser){
+          const token = jwt.sign({
+            id: user.id         
+          }, secret, { expiresIn: '12.5hrs' });
+          console.log(token);       
+            return {token, user};
+        } else {
+          console.log('Invalid password');
+        }
+      }
   }
-};
-
+}
 module.exports = new UsersService();

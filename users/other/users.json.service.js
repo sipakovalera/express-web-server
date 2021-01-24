@@ -64,7 +64,6 @@ class UsersService {
         const passwordByUser = bcrypt.compareSync(password, user.password);
           if(passwordByUser){
             const token = jwt.sign({
-              login: user.login,
               id: user.id
             }, secret, {expiresIn: '12.5hrs' })
               return ({token, user});

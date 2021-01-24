@@ -1,24 +1,29 @@
 const jwt = require('jsonwebtoken');
 const { secret } = require('../config/key');
+const User = require('../models/User');
 
-const auth = (req, res, next) => {
-  try{
-    const token = req.headers.authorization.split(' ')[1]; 
-    if(!req.user){
-      return res.status(401).json({
-        message: 'Invalid token'
-      })
+const auth = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    if(!token){
+      return res.status(401).send('Invalid token')
     }
 
     const decodeData = jwt.verify(token, secret);
+
+    if(await User.findOne({ 
+      where: { 
+        id: decodeData.id 
+      }}
+    )) {
       req.user = decodeData;
-      next(); 
+      next();
+    } else {
+      return res.status(401).send("User does not exit or has been deleted")
+    }
+
   } catch (e) {
-    res
-      .status(401)
-      .json({
-        message: 'Login in, please'
-      })
+    return res.status(401).send( 'Sign in, please')
   };
 };
 
