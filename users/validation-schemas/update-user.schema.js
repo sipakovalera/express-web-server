@@ -10,7 +10,9 @@ const updateUserSchema = Joi.object({
         .pattern(new RegExp('^[a-zA-Z0-9]{8,30}$')),
 
     login: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: true } })
+        .email({ minDomainSegments: 2, tlds: { allow: true } }),
+    
+    avatar: Joi.string()
 });
 
 module.exports = updateUserSchema;

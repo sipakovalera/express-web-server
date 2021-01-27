@@ -14,6 +14,8 @@ const createUserSchema = Joi.object({
     login: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: true } })
         .required(),
+ 
+    avatar: Joi.string()
 })
 
 module.exports = createUserSchema;

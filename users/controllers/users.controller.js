@@ -11,7 +11,7 @@ class UsersController {
   add = ( req, res, next ) => {
     res
       .status(200)
-      .send(this.service.add(req.body));
+      .send(this.service.add(req.body, req.file));
   };
 
   update = ( req, res, next ) => {
