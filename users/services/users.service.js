@@ -8,13 +8,14 @@ class UsersService {
     return await User.findAll();
   }
 
-  add = async(user) => {
+  add = async(user, file) => {
     const salt = await bcrypt.genSalt(10);
     return await User.create({
       id: user.id,
       name: user.name,
       login: user.login,
-      password:await bcrypt.hash(user.password, salt)
+      password:await bcrypt.hash(user.password, salt),
+      avatar: file
     })
   }
 

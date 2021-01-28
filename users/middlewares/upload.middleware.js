@@ -1,27 +1,16 @@
-const path = require('path');
 const multer = require('multer');
+const uuid = require('uuid');
+const path = require('path');
 
 const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) =>{
-      cb(null, path.join(__dirname, './upload/'));
+  destination: (req, file, cb) => {
+      cb(null, path.join(__dirname, '../upload'));
   },
-  filename: (req, file, cb) =>{
-      cb(null, new Date().toISOString() + file.originalname);
+  filename: (req, file, cb) => {
+    const fileArr = file.originalname.split('.');
+      cb(null, uuid.v4() + '.' + fileArr[fileArr.length - 1]);
   }
 });
 
-const fileFilter = (req, file, cb) => {
-  
-  if(file.mimetype === "avatar/png" || 
-    file.mimetype === "avatar/jpg"|| 
-    file.mimetype === "avatar/jpeg"){
-      cb(null, true);
-  }
-  else{
-      cb(null, false);
-  }
-};
 
-const upload = multer({storage: fileStorage, fileFilter});
-
-module.exports = upload;
+module.exports = multer({storage: fileStorage}).single('avatar');

@@ -9,7 +9,7 @@ const updateUserSchema = require('../validation-schemas/update-user.schema');
 
 router
   .get('/', auth, controller.get )
-  .post('/', upload.single('avatar'), validate(createUserSchema), controller.add )
+  .post('/', upload, validate(createUserSchema), controller.add )
   .delete('/:id', controller.delete)
   .put('/:id', validate(updateUserSchema), controller.update)
   .post('/login', controller.login);
